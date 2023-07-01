@@ -18,10 +18,11 @@
 
 * In another terminal:
   * cd <token_sale_dir>; cp  .env.sample  .env
+  * Update the MNEMONIC and INFURA_API_KEY env config parameters in the .env
   * cd truffle;  `npm install`
-  * Execute `truffle console --network ganache` and `migrate` and `test`
+  * Execute `truffle console --network ganache` and `test`
 
-* To test with the client app using Metamask, use either the `ganache_wallet` or `sepolia` test network as configured in the `truffle-config.js` 
+* To test with the client app, use the `ganache_wallet` or `sepolia` test network as configured in the `truffle-config.js`. See below for details about using `ganache_wallet` environment
 
 * To use `ganache_wallet` environment
   * Add a custom network in Metamask for `ganache`. The RPC URL and Chain ID will be found in the terminal where you executed `ganache` command
@@ -44,9 +45,13 @@
 
 * In the client, enter metamask accounts[1] and click on "KYC Approve Account" button (not accounts[0], which is the deployer of contracts and already KYC approved)
 
+* Metamask will prompt to confirm the transaction.
+  * **Make sure the `ganache` network is chosen and `accounts[0]` is selected in metamask**
+
 * After KYC approval, send the wei to the Movie Sale Contract address shown in the UI as accounts[1] from metamask
 
 * Click on "KYC Approve" button again to see the number of tokens displayed
+  * **Make sure the `ganache` network is chosen and `accounts[0]` is selected in metamask**
 
 ## Troubleshooting
   * If there are issues running the test scenarios, use `migrate --reset` in truffle console
