@@ -41,10 +41,23 @@ class App extends Component {
 
       this.movieTokenSaleInstAddress = this.movieTokenSaleInst._address;
 
-      this.setState({ loaded: true });
+      this.listenToTokenPurchasedEvents();
+
+      this.setState({ loaded: true }, this.updateUserTokensDisplay);
     } catch (error) {
       alert("Failed to load Web3, accounts, and contracts. ", JSON.stringify(error));
     }
+  }
+
+  updateUserTokensDisplay = async() => {
+    if (this.state.kyc_approve_address !== "") {
+      let numTokens = await this.movieTokenInst.methods.balanceOf(this.state.kyc_approve_address).call({from: this.deployer_account});
+      this.setState({["num_tokens"]: numTokens.toString()});
+    }
+  }
+
+  listenToTokenPurchasedEvents = async() => {
+    this.movieTokenSaleInst.events.TokensPurchased({to: this.deployer_account}).on("data", this.updateUserTokensDisplay);
   }
 
   handleKycApproveAccountInput = (event) => {
@@ -56,11 +69,9 @@ class App extends Component {
   }
 
   handleKycApproveAccountSubmit = async(event) => {
-    await this.movieTokenKycInst.methods.setAllowed(this.state.kyc_approve_address).send({from: this.deployer_account, gas: "1000000"});
-    let numTokens = await this.movieTokenInst.methods.balanceOf(this.state.kyc_approve_address).call({from: this.deployer_account});
-    this.setState({["num_tokens"]: numTokens.toString()});
-
-    alert("Congrats. You can now buy tokens. ", numTokens);
+    await this.movieTokenKycInst.methods.setAllowed(this.state.kyc_approve_address).send({from: this.deployer_account});
+    this.updateUserTokensDisplay();
+    alert("Congrats. You can now buy tokens.");
   }
 
   // Render the app. Add a text input and button to send to buy token

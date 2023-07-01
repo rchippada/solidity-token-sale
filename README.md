@@ -48,10 +48,7 @@
 * Metamask will prompt to confirm the transaction.
   * **Make sure the `ganache` network is chosen and `accounts[0]` is selected in metamask**
 
-* After KYC approval, send the wei to the Movie Sale Contract address shown in the UI as accounts[1] from metamask
-
-* Click on "KYC Approve" button again to see the number of tokens displayed
-  * **Make sure the `ganache` network is chosen and `accounts[0]` is selected in metamask**
+* After KYC approval, the number of tokens for this account is displayed. Send the wei to the Movie Sale Contract address shown in the UI as accounts[1] **from metamask**
 
 ## Troubleshooting
   * If there are issues running the test scenarios, use `migrate --reset` in truffle console
