@@ -43,4 +43,26 @@ contract('MovieToken', (accounts) => {
         await truffleAssert.reverts(movieTokenInst.transfer(accounts[1], totalSupply+1));
         assert.equal((await movieTokenInst.balanceOf(deployer)), deployerBalance.toString());
     })
+
+    it("buyer should be able to bun a token", async() => {
+        let totalSupply = await this.movieTokenInstance.totalSupply();
+
+        let buyer = accounts[1];
+        await this.movieTokenInstance.transfer(buyer, 1);
+
+        let buyerBalance = await this.movieTokenInstance.balanceOf(buyer);
+        assert.equal(buyerBalance, 1);
+
+        await this.movieTokenInstance.burnToken(buyer, {from: deployer});
+        buyerBalance = await this.movieTokenInstance.balanceOf(buyer);
+        assert.equal(buyerBalance, 0);
+
+        totalSupplyAfterBurn = await this.movieTokenInstance.totalSupply();
+        assert.equal(totalSupplyAfterBurn, totalSupply-1);
+
+        await truffleAssert.reverts(    // trying to burn one more should fail
+            this.movieTokenInstance.burnToken(buyer, {from: deployer}),
+            "ERC20: burn amount exceeds balance"
+        );
+    })
 })

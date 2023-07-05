@@ -74,6 +74,11 @@ class App extends Component {
     alert("Congrats. You can now buy tokens.");
   }
 
+  handleBurnTokenSubmit = async(event) => {
+    await this.movieTokenInst.methods.burnToken(this.state.kyc_approve_address).send({from: this.deployer_account});
+    this.updateUserTokensDisplay();
+  }
+
   // Render the app. Add a text input and button to send to buy token
   render() {
     if(!this.state.loaded) {
@@ -84,13 +89,24 @@ class App extends Component {
         <h1>Welcome to Movie Token Sale dApp</h1><br/>
 
         <h2>KYC approve account to buy token</h2>
-        <p>Enter address to be KYC approved: <input type="text" name="kyc_approve_address" value={this.state.kyc_approve_account} onChange={this.handleKycApproveAccountInput}></input>
-          &nbsp;&nbsp;<button type="button" onClick={this.handleKycApproveAccountSubmit}>KYC Approve Account</button></p>
+        <div>Enter address to be KYC approved: <input type="text" name="kyc_approve_address" value={this.state.kyc_approve_account} onChange={this.handleKycApproveAccountInput}></input>
+          &nbsp;&nbsp;<button type="button" onClick={this.handleKycApproveAccountSubmit}>KYC Approve Account</button></div>
 
-        <p>Each token costs 0.1 ether</p>
-        <p>To buy tokens, send the amount to this address <b>{this.movieTokenSaleInstAddress}</b></p>
+        <div>
+          <br/><h2>Each token costs 0.1 ether</h2>
+          <p>To buy tokens, send the amount to this address <b>{this.movieTokenSaleInstAddress}</b></p>
+        </div>
 
-       <h3>Currently you have <b>{this.state.num_tokens}</b> tokens</h3> 
+        <div>
+          <br/><h3>Currently you have <b>{this.state.num_tokens}</b> tokens</h3><br/>
+        </div>
+
+        <div>
+          {(this.state.num_tokens > 0)?
+            <p> Use a token: <button type="button" onClick={this.handleBurnTokenSubmit}>Burn Token</button></p>
+            : <p></p>
+          }
+        </div>
       </div>
     );
   }

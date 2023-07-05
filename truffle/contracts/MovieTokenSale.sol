@@ -13,6 +13,8 @@ contract MovieTokenSale {
     address owner;
 
     event TokensPurchased(address buyer, uint amount);
+    event ErrorLog(string reason);
+
     constructor(MovieToken token, MovieTokenKyc kyc) {
         movieToken = token;
         movieTokenKyc = kyc;
@@ -29,17 +31,19 @@ contract MovieTokenSale {
 
         uint tokensToTransfer = msg.value / tokenPriceInWei;
 
-        movieToken.buyToken(buyer, tokensToTransfer);
+        try movieToken.buyToken(buyer, tokensToTransfer) {
+            payable(owner).transfer(tokenPriceInWei*tokensToTransfer);  // transfer token price amount to the owner account
+            buyer.transfer(msg.value - tokenPriceInWei*tokensToTransfer);   // transer any remaining funds to the buyer
 
-        payable(owner).transfer(tokenPriceInWei*tokensToTransfer);  // transfer token price amount to the owner account
-        buyer.transfer(msg.value - tokenPriceInWei*tokensToTransfer);   // transer any remaining funds to the buyer
-
-        emit TokensPurchased(buyer, tokensToTransfer);
+            emit TokensPurchased(buyer, tokensToTransfer);
+        } catch Error(string memory reason) {
+            emit ErrorLog(reason);
+        }
     }
 
     // A buyer can buy tokens by sending the required amount of wei to this contract
     // A buyer should be kycApproved prior to sending money to this contract (using the dapp frontent in this example implementation)
     receive() external payable {
-       buyTokens(payable(msg.sender));
+        buyTokens(payable(msg.sender));
     }
 }

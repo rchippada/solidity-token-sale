@@ -20,7 +20,7 @@
   * cd <token_sale_dir>; cp  .env.sample  .env
   * Update the MNEMONIC and INFURA_API_KEY env config parameters in the .env
   * cd truffle;  `npm install`
-  * Execute `truffle console --network ganache` and `test`
+  * Execute `truffle console --network ganache`. You can use this to test migration script and tests.
 
 * To test with the client app, use the `ganache_wallet` or `sepolia` test network as configured in the `truffle-config.js`. See below for details about using `ganache_wallet` environment
 
