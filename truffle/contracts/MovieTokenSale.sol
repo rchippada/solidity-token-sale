@@ -4,6 +4,8 @@ pragma solidity ^0.8.18;
 import "./MovieToken.sol";
 import "./MovieTokenKyc.sol";
 
+import "truffle/console.sol";
+
 contract MovieTokenSale {
     MovieToken public movieToken;
     MovieTokenKyc private movieTokenKyc;
@@ -16,6 +18,7 @@ contract MovieTokenSale {
     event ErrorLog(string reason);
 
     constructor(MovieToken token, MovieTokenKyc kyc) {
+        console.log("An example console log statement");
         movieToken = token;
         movieTokenKyc = kyc;
         owner = msg.sender;
